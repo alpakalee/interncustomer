@@ -31,7 +31,17 @@
             }
             document.getElementById("loading-text").style.display = "none";
             document.getElementById("reservation-content").style.display = "block";
+
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const todayStr = today.toLocaleDateString('ko-KR', options);
+            const yesterdayStr = yesterday.toLocaleDateString('ko-KR', options);
+            document.getElementById("date-info").innerText = `${yesterdayStr} ~ ${todayStr}`;
         }
+        
         window.onload = fetchReservations;
     </script>
 </head>
@@ -83,6 +93,7 @@
         <h2 id="loading-text">어제의 예약을 로딩 중...</h2>
         <div id="reservation-content" style="display: none;">
             <h2>새로운 예약</h2>
+            <h4 id="date-info"></h4>
             <p id="count_1">돌 가족행사 : <span id="count_1_1">0</span> 건</p>
             <p id="count_2">웨딩 : <span id="count_2_2">0</span> 건</p>
             <p id="count_3">비즈니스 : <span id="count_3_3">0</span> 건</p>
