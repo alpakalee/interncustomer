@@ -1,16 +1,17 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import pandas as pd
 import os
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
+import threading
 
-#구글 시트 인증정보 설정
+# 구글 시트 인증정보 설정
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 creds = ServiceAccountCredentials.from_json_keyfile_name("C:/digital-yeti-429601-v5-01c3837c2955.json", scope)
 gc = gspread.authorize(creds)
 
-#플라스크 실행
+# 플라스크 실행
 app = Flask(__name__)
 
 # 초기 고객 데이터
@@ -36,12 +37,12 @@ spreadsheet_url3= "https://docs.google.com/spreadsheets/d/1Ogb4zN56bskVjSdp7jk6t
 # 엑셀 파일 경로(고객관리 저장)
 excel_file = 'customers.xlsx'
 
-#엑셀이 없으면 생성
+# 엑셀이 없으면 생성
 def create_initial_excel(file_path, data):
     df = pd.DataFrame(data)
     df.to_excel(file_path, index=False)
 
-#초기실행시 고객관리 데이터 불러오기
+# 초기 실행시 고객관리 데이터 불러오기
 def load_customers_from_excel(file_path):
     if not os.path.exists(file_path):
         create_initial_excel(file_path, initial_data)
@@ -49,11 +50,11 @@ def load_customers_from_excel(file_path):
     customers = df.to_dict(orient='records')
     return customers
 
-#고객관리 데이터 저장
+# 고객관리 데이터 저장
 def save_customers_to_excel(file_path, customers):
     df = pd.DataFrame(customers)
     df.to_excel(file_path, index=False)
-    
+
 # 고객 상세정보 데이터 가져오기
 def get_customer_from_excel(file_path, index):
     df = pd.read_excel(file_path)
@@ -66,7 +67,7 @@ def save_customer_to_excel(file_path, index, customer):
     for key in customer:
         df.at[index, key] = customer[key]
     df.to_excel(file_path, index=False)
-    
+
 # 고객 관리 데이터 삭제
 def delete_customer_from_excel(file_path, index):
     df = pd.read_excel(file_path)
@@ -85,7 +86,7 @@ def find_customer_data(sheet_data, customer_name, event_type):
     search_column = '예약자 성함'
     if event_type == "비즈니스":
         search_column = '예약자(담당자) 성함'
-    
+
     for row in sheet_data:
         if row.get(search_column) == customer_name:
             return row
@@ -110,7 +111,8 @@ def get_sheet_details_by_event_type(event_type):
         }
     else:
         return None
-    
+
+# 새 예약 수 계산
 def count_new_reservations(sheet_url):
     today = datetime.today().date()
     doc = gc.open_by_url(sheet_url)
@@ -120,12 +122,12 @@ def count_new_reservations(sheet_url):
     for date_str in sheet_dates:
         try:
             if date_str == "타임스탬프":
-                    continue
+                continue
             date_only_str = date_str.split()[0] + " " + date_str.split()[1] + " " + date_str.split()[2]
             date_obj = datetime.strptime(date_only_str, '%Y. %m. %d').date()
 
             date_diff = abs((today - date_obj).days)
-            
+
             # 날짜 비교
             if date_diff <= 1:
                 count += 1
@@ -133,16 +135,23 @@ def count_new_reservations(sheet_url):
             print(f"유효하지 않은 날짜 형식: {date_str}, 오류: {ve}")
     return count
 
+# 비동기적으로 예약 수를 가져오는 API
+@app.route('/api/reservations', methods=['GET'])
+def get_reservations():
+    count_1_1 = count_new_reservations(spreadsheet_url1)
+    count_2_2 = count_new_reservations(spreadsheet_url2)
+    count_3_3 = count_new_reservations(spreadsheet_url3)
+    return jsonify({
+        'count_1': count_1_1,
+        'count_2': count_2_2,
+        'count_3': count_3_3
+    })
+
 @app.route('/')
 def index():
     customers = load_customers_from_excel(excel_file)
-    count_1 = count_new_reservations(spreadsheet_url1)
-    count_2 = count_new_reservations(spreadsheet_url2)
-    count_3 = count_new_reservations(spreadsheet_url3)
-    return render_template('index.html', customers=customers, count_1=count_1,count_2=count_2,count_3=count_3)
+    return render_template('index.html', customers=customers)
 
-
-# 삭제 기능
 @app.route('/delete/<int:index>', methods=['POST'])
 def delete_customer(index):
     delete_customer_from_excel(excel_file, index)
