@@ -1,0 +1,29 @@
+<!-- templates/response_form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>응답폼</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container detail-container">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='응답폼.png') }}" alt="어반브룩 아이콘" class="logo" style="width:100%; height:auto;">
+        </div>
+        <table>
+            {% for key, value in customer_data.items() %}
+            <tr>
+                <th>{{ key }}</th>
+                <td>{{ value }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="button-container-response">
+            <button class="btn_detail" onclick="window.close()">닫기</button>
+        </div>
+    </div>
+    
+</body>
+</html>

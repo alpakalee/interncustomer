@@ -1,0 +1,278 @@
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #d6c0a8;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden; /* Prevents scrolling of the entire body */
+}
+
+.container {
+    background-color: #fff;
+    width: 85vw; /* Adjusted width to fit within the viewport */
+    max-width: 1200px; /* Maximum width */
+    /*height: 90vh; *//* Adjusted height to fit within the viewport */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
+    height: 90vh; /* 화면 높이에 맞추기 위해 전체 높이를 설정 */
+}
+
+.container detail-container {
+    background-color: #fff;
+    width: 85vw; /* Adjusted width to fit within the viewport */
+    max-width: 1200px; /* Maximum width */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
+    height: 90vh; /* 화면 높이에 맞추기 위해 전체 높이를 설정 */
+}
+
+tr {
+    cursor: pointer;
+}
+
+tr:hover {
+    background-color: #f1e9d8;
+}
+
+h1 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    width: calc(100% - 40px);
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.search-bar img {
+    width: 24px;
+    height: 24px;
+}
+
+.table-container {
+    flex: 1;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Ensures that the table does not exceed the container width */
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+    text-align: center; /* 수평 중앙 정렬 */
+    height: 100%; /* 부모 요소 높이에 맞추기 */
+    resize: none; /* 필요에 따라 조정 */
+}
+
+th {
+    background-color: #f4f4f4;
+    cursor: pointer;
+    position: sticky;
+    top: 0;
+    background: #f4f4f4; /* Ensures header background is not transparent */
+    width: 30%;
+}
+
+.sort-icon {
+    width: 12px;
+    height: 12px;
+    margin-left: 5px;
+}
+
+.delete {
+    color: red;
+    cursor: pointer;
+}
+
+.add-customer {
+    display: block;
+    width: 95%;
+    text-align: center;
+    padding: 15px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    position: sticky;
+    bottom: 0;
+}
+
+.btn {
+    display: block;
+    width: 15%;
+    text-align: center;
+    padding: 10px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: right;
+    margin-top: 20px;
+}
+
+.button-container-response {
+    display: inline-block;
+    justify-content: right;
+    margin-top: 20px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+.flex-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 1ch;
+}
+
+.flex-container .small-btn {
+    width: 40%;
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-left: auto;
+    margin-top: 0; /* Remove margin-top for better alignment */
+
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+
+
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.btn_detail {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.left-align {
+    text-align: left;
+    padding-left: 3ch;
+}
+
+.right-aligned {
+    justify-content: flex-end; /* 버튼을 오른쪽으로 정렬 */
+}
+
+
+.right-aligned {
+    margin-left: auto; /* 버튼을 오른쪽으로 밀어붙임 */
+}
+
+.event-type-select {
+    width: 98%;
+    padding-top: 10px; /* 위쪽 간격 */
+    padding-bottom: 10px; /* 아래쪽 간격 */
+    padding-left: 5px; /* 좌측 간격, 필요에 따라 조정 */
+    padding-right: 5px; /* 우측 간격, 필요에 따라 조정 */
+    font-size: 16px; /* 글자 크기, 필요에 따라 조정 */
+    box-sizing: border-box; /* 패딩이 width에 포함되도록 설정 */
+}
+
+.main-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.sidebar {
+    width: 300px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-left: 20px;
+}
+
+.sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.sidebar p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.refresh-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.highlight {
+    color: red;
+    font-weight: bold;
+}

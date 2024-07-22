@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>어반브룩 고객 관리</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='sort.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='search.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='detail.js') }}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='로고제목.png') }}" alt="어반브룩 아이콘" class="logo" style="width:100%; height:auto;">
+        </div>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="검색">
+            <img src="{{ url_for('static', filename='돋보기.png') }}" alt="검색 아이콘">
+        </div>
+        <div class="table-container">
+            <table id="customer-table">
+                <thead>
+                    <tr>
+                        <th>상담일자 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th>행사일자 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th>고객명</th>
+                        <th>행사 종류 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th>전화번호</th>
+                        <th>상담중/상담완료 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                    <tr data-href="{{ url_for('detail', index=loop.index0) }}">
+                        <td>{{ customer['상담일자'] }}</td>
+                        <td>{{ customer['행사일자'] }}</td>
+                        <td>{{ customer['고객명'] }}</td>
+                        <td>{{ customer['행사 종류'] }}</td>
+                        <td>{{ customer['전화번호'] }}</td>
+                        <td>{{ customer['상담중/상담완료'] }}</td>
+                        <td>
+                            <form action="{{ url_for('delete_customer', index=loop.index0) }}" method="POST" onsubmit="return confirm('정말로 삭제하시겠습니까?');">
+                                <button type="submit" class="delete-btn">삭제</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <a href="{{ url_for('add_customer') }}" class="add-customer">고객 추가</a>
+    </div>
+    <div class="sidebar">
+        <h2>새로운 예약</h2>
+        <p class="{% if count_1 != 0 %}highlight{% endif %}">돌 가족행사 새로운 예약 수: {{ count_1 }} 건</p>
+        <p class="{% if count_2 != 0 %}highlight{% endif %}">웨딩 새로운 예약 수: {{ count_2 }} 건</p>
+        <p class="{% if count_3 != 0 %}highlight{% endif %}">비즈니스 새로운 예약 수: {{ count_3 }} 건</p>
+        <button class="refresh-button" onclick="window.location.reload();">새로고침</button>
+    </div>
+</body>
+</html>
