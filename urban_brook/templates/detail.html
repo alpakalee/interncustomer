@@ -134,9 +134,23 @@
         }
 
         function openResponseForm(index) {
-            const url = "{{ url_for('response_form', index=0) }}".replace('0', index);
-            window.open(url, "newwindow", "width=800,height=950,top=50,left=1200");
-        }
+    fetch(`/response_form/${index}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+            const params = new URLSearchParams({ index: index }).toString();
+            const url = `/show_response_form?${params}`;
+            window.open(url, `newwindow`, "width=800,height=950,top=50,left=1200");
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('응답 폼을 불러오는데 실패했습니다.');
+        });
+}
+
     </script>
 </body>
 </html>

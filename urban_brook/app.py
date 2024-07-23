@@ -7,7 +7,7 @@ from datetime import datetime
 
 # 구글 시트 인증정보 설정
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("digital-yeti-429601-v5-01c3837c2955.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("C:/digital-yeti-429601-v5-01c3837c2955.json", scope)
 gc = gspread.authorize(creds)
 
 # 플라스크 실행
@@ -62,6 +62,7 @@ def find_customer_data(sheet_data, customer_name, event_type):
     search_column = '예약자 성함'
     if event_type == "비즈니스":
         search_column = '예약자(담당자) 성함'
+
     for row in sheet_data:
         if row.get(search_column) == customer_name:
             return row
@@ -95,6 +96,7 @@ def count_new_reservations(sheet_url):
                 continue
             date_only_str = date_str.split()[0] + " " + date_str.split()[1] + " " + date_str.split()[2]
             date_obj = datetime.strptime(date_only_str, '%Y. %m. %d').date()
+
             date_diff = abs((today - date_obj).days)
             # 날짜 비교
             if date_diff <= 1:
@@ -184,11 +186,17 @@ def response_form(index):
     event_type = customer['행사종류']
     customer_name = customer['예약자']
     sheet_data = get_sheet_data_by_event_type(event_type)
-    customer_data = find_customer_data(sheet_data, customer_name, event_type)
-    if not customer_data:
-        return f"{event_type}의 구글 시트에서 예약자 명을 찾지 못했습니다.\n다시 한 번 확인해주세요."
+    
+    customer_data_list = [row for row in sheet_data if row.get('예약자 성함' if event_type != "비즈니스" else '예약자(담당자) 성함') == customer_name]
+    
+    if not customer_data_list:
+        return jsonify({'error': f"{event_type}의 구글 시트에서 예약자 명을 찾지 못했습니다.\n다시 한 번 확인해주세요."}), 404
 
-    return render_template('response_form.html', customer_data=customer_data)
+    return jsonify({'customer_data_list': customer_data_list})
+
+@app.route('/show_response_form')
+def show_response_form():
+    return render_template('response_form.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
