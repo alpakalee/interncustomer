@@ -4,7 +4,6 @@ import os
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
-import threading
 
 # 구글 시트 인증정보 설정
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -16,12 +15,13 @@ app = Flask(__name__)
 
 # 초기 고객 데이터
 initial_data = [
-    {'상담일자': '7/13', '행사일자': '7/20', '고객명': '○○○', '행사 종류': '결혼식','세부종류': '결혼식', '전화번호': '010-1111-1111', '상담중/상담완료': '상담완료'}
+    {'상담일자': '7/13', '행사일자': '7/20', '고객명': '○○○', '행사종류': '결혼식', '세부종류': '결혼식', '전화번호': '010-1111-1111', '상담중/상담완료': '상담완료'}
 ]
 
 spreadsheet_url1= "https://docs.google.com/spreadsheets/d/1rSQ9kiJ59S6aYP-oXaFDVTe2cSlt48Xr8FgKz-gZIM4/edit?gid=1361594786#gid=1361594786"
 spreadsheet_url2= "https://docs.google.com/spreadsheets/d/1OtWfY2pDtMweXd74ttAleVNloei8cyM99uGSmZISn1A/edit?gid=1258371576#gid=1258371576"
 spreadsheet_url3= "https://docs.google.com/spreadsheets/d/1Ogb4zN56bskVjSdp7jk6tNVntbec2GS1DDBunQfVi2U/edit?gid=1609720562#gid=1609720562"
+spreadsheet_url4= "https://docs.google.com/spreadsheets/d/1b-5orqX9nHSNMkmbW8qgHO4QK3fcdFHi8ieSojJX0jQ/edit?gid=926356915#gid=926356915"
 
 # 엑셀 파일 경로(고객관리 저장)
 excel_file = 'customers.xlsx'
@@ -98,6 +98,11 @@ def get_sheet_details_by_event_type(event_type):
             "spreadsheet_url": spreadsheet_url3,
             "worksheet_name": "설문지 응답 시트1"
         }
+    elif event_type == "기타":
+        return {
+            "spreadsheet_url": spreadsheet_url4,
+            "worksheet_name": "설문지 응답 시트1"
+        }
     else:
         return None
 
@@ -130,10 +135,12 @@ def get_reservations():
     count_1_1 = count_new_reservations(spreadsheet_url1)
     count_2_2 = count_new_reservations(spreadsheet_url2)
     count_3_3 = count_new_reservations(spreadsheet_url3)
+    count_4_4 = count_new_reservations(spreadsheet_url4)
     return jsonify({
         'count_1': count_1_1,
         'count_2': count_2_2,
-        'count_3': count_3_3
+        'count_3': count_3_3,
+        'count_4': count_4_4
     })
 
 @app.route('/')
@@ -167,7 +174,7 @@ def create_customer():
         '상담일자': request.form['상담일자'],
         '행사일자': request.form['행사일자'],
         '고객명': request.form['고객명'],
-        '행사 종류': request.form['행사종류'],
+        '행사종류': request.form['행사종류'],
         '세부종류': request.form['세부종류'],
         '전화번호': request.form['전화번호'],
         '상담내용': request.form['상담내용'],
@@ -184,8 +191,8 @@ def update_status(index, status):
     customer['상담일자'] = request.form['상담일자']
     customer['행사일자'] = request.form['행사일자']
     customer['고객명'] = request.form['고객명']
-    customer['행사 종류'] = request.form['행사종류']
-    customer['세부종류'] = request.form['세부종류']  # 추가된 필드
+    customer['행사종류'] = request.form['행사종류']
+    customer['세부종류'] = request.form['세부종류']
     customer['전화번호'] = request.form['전화번호']
     customer['상담내용'] = request.form['상담내용']
     customer['상담중/상담완료'] = status
@@ -195,16 +202,18 @@ def update_status(index, status):
 @app.route('/response_form/<int:index>', methods=['GET'])
 def response_form(index):
     customer = get_customer_from_excel(excel_file, index)
-    event_type = customer['행사 종류']
+    event_type = customer['행사종류']
     customer_name = customer['고객명']
 
     sheet_details = get_sheet_details_by_event_type(event_type)
+    print(sheet_details)
     if not sheet_details:
         return "Invalid event type"
 
     sheet_data = get_google_sheet_data(sheet_details['spreadsheet_url'], sheet_details['worksheet_name'])
     customer_data = find_customer_data(sheet_data, customer_name, event_type)
-
+    print(sheet_data)
+    print(customer_data)
     if not customer_data:
         return "Customer data not found in Google Sheets"
 
