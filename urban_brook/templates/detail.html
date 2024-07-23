@@ -33,12 +33,16 @@
             <tr>
                 <th>행사 종류</th>
                 <td>
-                        <select id="행사종류" name="행사종류" style="width:98%;" class="event-type-select"   >
+                    <select id="행사종류" name="행사종류" style="width:98%;" class="event-type-select">
                         <option value="돌/가족행사" {% if customer['행사 종류'] == '돌/가족행사' %}selected{% endif %}>돌/가족행사</option>
                         <option value="웨딩" {% if customer['행사 종류'] == '웨딩' %}selected{% endif %}>웨딩</option>
                         <option value="비즈니스" {% if customer['행사 종류'] == '비즈니스' %}selected{% endif %}>비즈니스</option>
-                </select>
+                    </select>
                 </td>
+            </tr>
+            <tr>
+                <th>세부종류</th>
+                <td><textarea id="세부종류" name="세부종류" rows="1" style="width:95%;">{{ customer['세부종류'] }}</textarea></td>
             </tr>
             <tr>
                 <th>전화번호</th>
@@ -46,7 +50,7 @@
             </tr>
             <tr>
                 <th>상담중/상담완료</th>
-                <td class="left-align"> {{ customer['상담중/상담완료'] }}</td>
+                <td class="left-align">{{ customer['상담중/상담완료'] }}</td>
             </tr>
             <tr>
                 <th>상담내용</th>
@@ -57,11 +61,23 @@
         </table>
         <div class="button-container">
             <form action="{{ url_for('update_status', index=index, status='상담중') }}" method="POST" style="flex: 1; margin-right: 10px;" class="status-form" onsubmit="return updateStatus(event, '상담중')">
-                <input type="hidden" name="상담내용" value="">
+                <input type="hidden" name="상담일자" id="hidden-상담일자" value="">
+                <input type="hidden" name="행사일자" id="hidden-행사일자" value="">
+                <input type="hidden" name="고객명" id="hidden-고객명" value="">
+                <input type="hidden" name="행사종류" id="hidden-행사종류" value="">
+                <input type="hidden" name="세부종류" id="hidden-세부종류" value="">
+                <input type="hidden" name="전화번호" id="hidden-전화번호" value="">
+                <input type="hidden" name="상담내용" id="hidden-상담내용" value="">
                 <button type="submit" class="btn_detail">상담중으로 저장하기</button>
             </form>
             <form action="{{ url_for('update_status', index=index, status='상담완료') }}" method="POST" style="flex: 1; margin-left: 10px;" class="status-form" onsubmit="return updateStatus(event, '상담완료')">
-                <input type="hidden" name="상담내용" value="">
+                <input type="hidden" name="상담일자" id="hidden-상담일자-완료" value="">
+                <input type="hidden" name="행사일자" id="hidden-행사일자-완료" value="">
+                <input type="hidden" name="고객명" id="hidden-고객명-완료" value="">
+                <input type="hidden" name="행사종류" id="hidden-행사종류-완료" value="">
+                <input type="hidden" name="세부종류" id="hidden-세부종류-완료" value="">
+                <input type="hidden" name="전화번호" id="hidden-전화번호-완료" value="">
+                <input type="hidden" name="상담내용" id="hidden-상담내용-완료" value="">
                 <button type="submit" class="btn_detail">상담완료로 저장하기</button>
             </form>
         </div>
@@ -77,21 +93,21 @@
         const 행사일자 = document.getElementById('행사일자').value;
         const 고객명 = document.getElementById('고객명').value;
         const 행사종류 = document.getElementById('행사종류').value;
+        const 세부종류 = document.getElementById('세부종류').value;
         const 전화번호 = document.getElementById('전화번호').value;
         const 상담내용 = document.getElementById('상담내용').value;
-        
-        const formData = new FormData(form);
-        formData.append('상담일자', 상담일자);
-        formData.append('행사일자', 행사일자);
-        formData.append('고객명', 고객명);
-        formData.append('행사종류', 행사종류);
-        formData.append('전화번호', 전화번호);
-        formData.append('상담내용', 상담내용);
-        formData.append('상담중/상담완료', status);
+
+        form.querySelector('#hidden-상담일자').value = 상담일자;
+        form.querySelector('#hidden-행사일자').value = 행사일자;
+        form.querySelector('#hidden-고객명').value = 고객명;
+        form.querySelector('#hidden-행사종류').value = 행사종류;
+        form.querySelector('#hidden-세부종류').value = 세부종류;
+        form.querySelector('#hidden-전화번호').value = 전화번호;
+        form.querySelector('#hidden-상담내용').value = 상담내용;
 
         fetch(form.action, {
             method: form.method,
-            body: formData,
+            body: new FormData(form),
         }).then(response => {
             if (response.ok) {
                 window.location.reload(); // Refresh the current window

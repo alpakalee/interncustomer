@@ -16,18 +16,7 @@ app = Flask(__name__)
 
 # 초기 고객 데이터
 initial_data = [
-    {'상담일자': '7/13', '행사일자': '7/20', '고객명': '○○○', '행사 종류': '결혼식', '전화번호': '010-1111-1111', '상담중/상담완료': '상담완료'},
-    {'상담일자': '7/13', '행사일자': '7/21', '고객명': '●●●', '행사 종류': '돌잔치', '전화번호': '010-1111-1112', '상담중/상담완료': '상담중'},
-    {'상담일자': '7/15', '행사일자': '7/22', '고객명': 'OOO', '행사 종류': '결혼식', '전화번호': '010-0000-0000', '상담중/상담완료': '상담중'},
-    {'상담일자': '7/15', '행사일자': '7/23', '고객명': '□□s□', '행사 종류': '세미나', '전화번호': '010-1111-1113', '상담중/상담완료': '상담완료'},
-    {'상담일자': '7/15', '행사일자': '7/23', '고객명': '□□d□', '행사 종류': '세미나', '전화번호': '010-1111-1113', '상담중/상담완료': '상담완료'},
-    {'상담일자': '7/15', '행사일자': '7/23', '고객명': '□c□□', '행사 종류': '세미나', '전화번호': '010-1111-1113', '상담중/상담완료': '상담완료'},
-    {'상담일자': '7/15', '행사일자': '7/23', '고객명': '□□v□', '행사 종류': '세미나', '전화번호': '010-1111-1113', '상담중/상담완료': '상담완료'},
-    {'상담일자': '7/15', '행사일자': '7/23', '고객명': '□sq□□', '행사 종류': '세미나', '전화번호': '010-1111-1113', '상담중/상담완료': '상담완료'},
-    {'상담일자': '7/15', '행사일자': '7/23', '고객명': '□□b□', '행사 종류': '세미나', '전화번호': '010-1111-1113', '상담중/상담완료': '상담완료'},
-    {'상담일자': '7/15', '행사일자': '7/23', '고객명': '□□s□', '행사 종류': '세미나', '전화번호': '010-1111-1113', '상담중/상담완료': '상담완료'},
-    {'상담일자': '7/15', '행사일자': '7/23', '고객명': '□□z□', '행사 종류': '세미나', '전화번호': '010-1111-1113', '상담중/상담완료': '상담완료'},
-    {'상담일자': '7/15', '행사일자': '7/23', '고객명': '□□x□', '행사 종류': '세미나', '전화번호': '010-1111-1113', '상담중/상담완료': '상담완료'}
+    {'상담일자': '7/13', '행사일자': '7/20', '고객명': '○○○', '행사 종류': '결혼식','세부종류': '결혼식', '전화번호': '010-1111-1111', '상담중/상담완료': '상담완료'}
 ]
 
 spreadsheet_url1= "https://docs.google.com/spreadsheets/d/1rSQ9kiJ59S6aYP-oXaFDVTe2cSlt48Xr8FgKz-gZIM4/edit?gid=1361594786#gid=1361594786"
@@ -46,7 +35,7 @@ def create_initial_excel(file_path, data):
 def load_customers_from_excel(file_path):
     if not os.path.exists(file_path):
         create_initial_excel(file_path, initial_data)
-    df = pd.read_excel(file_path)
+    df = pd.read_excel(file_path, dtype=str)
     customers = df.to_dict(orient='records')
     return customers
 
@@ -57,13 +46,13 @@ def save_customers_to_excel(file_path, customers):
 
 # 고객 상세정보 데이터 가져오기
 def get_customer_from_excel(file_path, index):
-    df = pd.read_excel(file_path)
+    df = pd.read_excel(file_path, dtype=str)
     customer = df.iloc[index].to_dict()
     return customer
 
 # 고객 상세정보 데이터 저장
 def save_customer_to_excel(file_path, index, customer):
-    df = pd.read_excel(file_path)
+    df = pd.read_excel(file_path, dtype=str)
     for key in customer:
         df.at[index, key] = customer[key]
     df.to_excel(file_path, index=False)
@@ -179,6 +168,7 @@ def create_customer():
         '행사일자': request.form['행사일자'],
         '고객명': request.form['고객명'],
         '행사 종류': request.form['행사종류'],
+        '세부종류': request.form['세부종류'],
         '전화번호': request.form['전화번호'],
         '상담내용': request.form['상담내용'],
         '상담중/상담완료': request.form['상담중/상담완료']
@@ -195,6 +185,7 @@ def update_status(index, status):
     customer['행사일자'] = request.form['행사일자']
     customer['고객명'] = request.form['고객명']
     customer['행사 종류'] = request.form['행사종류']
+    customer['세부종류'] = request.form['세부종류']  # 추가된 필드
     customer['전화번호'] = request.form['전화번호']
     customer['상담내용'] = request.form['상담내용']
     customer['상담중/상담완료'] = status
