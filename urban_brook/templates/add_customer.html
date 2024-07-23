@@ -14,16 +14,8 @@
         <form action="{{ url_for('create_customer') }}" method="POST">
             <table>
                 <tr>
-                    <th>상담일자</th>
-                    <td><textarea name="상담일자" rows="1" style="width:95%;"></textarea></td>
-                </tr>
-                <tr>
-                    <th>행사일자</th>
-                    <td><textarea name="행사일자" rows="1" style="width:95%;"></textarea></td>
-                </tr>
-                <tr>
-                    <th>고객명</th>
-                    <td><textarea name="고객명" rows="1" style="width:95%;"></textarea></td>
+                    <th>상담일</th>
+                    <td><textarea name="상담일" rows="1" style="width:95%;"></textarea></td>
                 </tr>
                 <tr>
                     <th>행사 종류</th>
@@ -37,25 +29,45 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>세부종류</th>
-                    <td><textarea name="세부종류" rows="1" style="width:95%;"></textarea></td>
+                    <th>구분</th>
+                    <td><textarea name="구분" rows="1" style="width:95%;"></textarea></td>
                 </tr>
                 <tr>
-                    <th>전화번호</th>
-                    <td><textarea name="전화번호" rows="1" style="width:95%;"></textarea></td>
+                    <th>행사날짜</th>
+                    <td><textarea name="행사날짜" rows="1" style="width:95%;"></textarea></td>
+                </tr>
+                <tr>
+                    <th>예상인원</th>
+                    <td><textarea name="예상인원" rows="1" style="width:95%;"></textarea></td>
+                </tr>
+                <tr>
+                    <th>시간</th>
+                    <td><textarea name="시간" rows="1" style="width:95%;"></textarea></td>
+                </tr>
+                <tr>
+                    <th>예약자</th>
+                    <td><textarea name="예약자" rows="1" style="width:95%;"></textarea></td>
+                </tr>
+                <tr>
+                    <th>연락처</th>
+                    <td><textarea name="연락처" rows="1" style="width:95%;"></textarea></td>
+                </tr>
+                <tr>
+                    <th>계약중/계약완료</th>
+                    <td>
+                        <select name="계약중/계약완료" style="width:98%;" class="event-type-select">
+                            <option value="계약중">계약중</option>
+                            <option value="계약완료">계약완료</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>문자발송</th>
+                    <td><textarea name="문자발송" rows="5" style="width:95%;"></textarea></td>
                 </tr>
                 <tr>
                     <th>상담내용</th>
                     <td><textarea name="상담내용" rows="5" style="width:95%;"></textarea></td>
-                </tr>
-                <tr>
-                    <th>상담중/상담완료</th>
-                    <td>
-                        <select name="상담중/상담완료" style="width:98%;" class="event-type-select">
-                            <option value="상담중">상담중</option>
-                            <option value="상담완료">상담완료</option>
-                        </select>
-                    </td>
                 </tr>
             </table>
             <div class="button-container">

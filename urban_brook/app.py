@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 # 초기 고객 데이터
 initial_data = [
-    {'상담일자': '7/13', '행사일자': '7/20', '고객명': '○○○', '행사종류': '결혼식', '세부종류': '결혼식', '전화번호': '010-1111-1111', '상담중/상담완료': '상담완료'}
+    {'상담일': '7/13', '행사종류': '웨딩', '구분': '결혼식', '행사날짜': '7/20', '예상인원': '10명', '예약자': '○○○',  '연락처': '010-1111-1111', '계약중/계약완료': '계약완료', '문자발송': 'o', '상담내용': '~~~'}
 ]
 
 spreadsheet_url1= "https://docs.google.com/spreadsheets/d/1rSQ9kiJ59S6aYP-oXaFDVTe2cSlt48Xr8FgKz-gZIM4/edit?gid=1361594786#gid=1361594786"
@@ -55,12 +55,6 @@ def save_customer_to_excel(file_path, index, customer):
     df = pd.read_excel(file_path, dtype=str)
     for key in customer:
         df.at[index, key] = customer[key]
-    df.to_excel(file_path, index=False)
-
-# 고객 관리 데이터 삭제
-def delete_customer_from_excel(file_path, index):
-    df = pd.read_excel(file_path)
-    df.drop(index, inplace=True)
     df.to_excel(file_path, index=False)
 
 # 구글 시트에서 데이터 가져오기
@@ -132,15 +126,21 @@ def count_new_reservations(sheet_url):
 # 비동기적으로 예약 수를 가져오는 API
 @app.route('/api/reservations', methods=['GET'])
 def get_reservations():
-    count_1_1 = count_new_reservations(spreadsheet_url1)
-    count_2_2 = count_new_reservations(spreadsheet_url2)
-    count_3_3 = count_new_reservations(spreadsheet_url3)
-    count_4_4 = count_new_reservations(spreadsheet_url4)
+    # count_1_1 = count_new_reservations(spreadsheet_url1)
+    # count_2_2 = count_new_reservations(spreadsheet_url2)
+    # count_3_3 = count_new_reservations(spreadsheet_url3)
+    # count_4_4 = count_new_reservations(spreadsheet_url4)
+    # return jsonify({
+    #     'count_1': count_1_1,
+    #     'count_2': count_2_2,
+    #     'count_3': count_3_3,
+    #     'count_4': count_4_4
+    # })
     return jsonify({
-        'count_1': count_1_1,
-        'count_2': count_2_2,
-        'count_3': count_3_3,
-        'count_4': count_4_4
+        'count_1': 1,
+        'count_2': 2,
+        'count_3': 3,
+        'count_4': 4
     })
 
 @app.route('/')
@@ -148,17 +148,13 @@ def index():
     customers = load_customers_from_excel(excel_file)
     return render_template('index.html', customers=customers)
 
-@app.route('/delete/<int:index>', methods=['POST'])
-def delete_customer(index):
-    delete_customer_from_excel(excel_file, index)
-    return redirect(url_for('index'))
-
+#수정
 @app.route('/detail/<int:index>', methods=['GET', 'POST'])
 def detail(index):
     if request.method == 'POST':
         customer = get_customer_from_excel(excel_file, index)
-        customer['상담내용'] = request.form['상담내용']
-        customer['상담중/상담완료'] = request.form['상담중/상담완료']
+        # customer['상담내용'] = request.form['상담내용']
+        # customer['상담중/상담완료'] = request.form['상담중/상담완료']
         save_customer_to_excel(excel_file, index, customer)
         return redirect(url_for('detail', index=index))
     customer = get_customer_from_excel(excel_file, index)
@@ -171,14 +167,17 @@ def add_customer():
 @app.route('/create_customer', methods=['POST'])
 def create_customer():
     new_customer = {
-        '상담일자': request.form['상담일자'],
-        '행사일자': request.form['행사일자'],
-        '고객명': request.form['고객명'],
+        '상담일': request.form['상담일'],
         '행사종류': request.form['행사종류'],
-        '세부종류': request.form['세부종류'],
-        '전화번호': request.form['전화번호'],
-        '상담내용': request.form['상담내용'],
-        '상담중/상담완료': request.form['상담중/상담완료']
+        '구분': request.form['구분'],
+        '행사날짜': request.form['행사날짜'],
+        '예상인원': request.form['예상인원'],
+        '시간': request.form['시간'],
+        '예약자': request.form['예약자'],
+        '연락처': request.form['연락처'],
+        '계약중/계약완료': request.form['계약중/계약완료'],
+        '문자발송': request.form['문자발송'],
+        '상담내용': request.form['상담내용']
     }
     customers = load_customers_from_excel(excel_file)
     customers.append(new_customer)
@@ -188,14 +187,17 @@ def create_customer():
 @app.route('/update_status/<int:index>/<status>', methods=['POST'])
 def update_status(index, status):
     customer = get_customer_from_excel(excel_file, index)
-    customer['상담일자'] = request.form['상담일자']
-    customer['행사일자'] = request.form['행사일자']
-    customer['고객명'] = request.form['고객명']
+    customer['상담일'] = request.form['상담일']
     customer['행사종류'] = request.form['행사종류']
-    customer['세부종류'] = request.form['세부종류']
-    customer['전화번호'] = request.form['전화번호']
+    customer['구분'] = request.form['구분']
+    customer['행사날짜'] = request.form['행사날짜']
+    customer['예상인원'] = request.form['예상인원']
+    customer['시간'] = request.form['시간']
+    customer['예약자'] = request.form['예약자']
+    customer['연락처'] = request.form['연락처']
+    customer['계약중/계약완료'] = status
+    customer['문자발송'] = request.form['문자발송']
     customer['상담내용'] = request.form['상담내용']
-    customer['상담중/상담완료'] = status
     save_customer_to_excel(excel_file, index, customer)
     return '', 204  # No Content response to indicate successful update
 
@@ -203,19 +205,16 @@ def update_status(index, status):
 def response_form(index):
     customer = get_customer_from_excel(excel_file, index)
     event_type = customer['행사종류']
-    customer_name = customer['고객명']
-
+    customer_name = customer['예약자']
     sheet_details = get_sheet_details_by_event_type(event_type)
-    print(sheet_details)
-    if not sheet_details:
-        return "Invalid event type"
-
+    #수정 worksheet name 없애기
     sheet_data = get_google_sheet_data(sheet_details['spreadsheet_url'], sheet_details['worksheet_name'])
-    customer_data = find_customer_data(sheet_data, customer_name, event_type)
     print(sheet_data)
-    print(customer_data)
+    print(customer_name)
+    print(event_type)
+    customer_data = find_customer_data(sheet_data, customer_name, event_type)
     if not customer_data:
-        return "Customer data not found in Google Sheets"
+        return f"{event_type}의 구글 시트에서 예약자 명을 찾지 못했습니다.\n다시 한 번 확인해주세요."
 
     return render_template('response_form.html', customer_data=customer_data)
 

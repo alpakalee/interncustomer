@@ -9,6 +9,7 @@
     <script src="{{ url_for('static', filename='search.js') }}" defer></script>
     <script src="{{ url_for('static', filename='detail.js') }}" defer></script>
     <script>
+        // 날짜, 구글 시트 새로운 예약 로딩
         async function fetchReservations() {
             document.getElementById("loading-text").style.display = "block";
             document.getElementById("reservation-content").style.display = "none";
@@ -50,9 +51,11 @@
 </head>
 <body>
     <div class="container">
+        <!-- 로고 -->
         <div class="logo-container">
             <img src="{{ url_for('static', filename='로고제목.png') }}" alt="어반브룩 아이콘" class="logo" style="width:100%; height:auto;">
         </div>
+        <!-- 검색창 -->
         <div class="search-bar">
             <input type="text" id="search-input" placeholder="검색">
             <img src="{{ url_for('static', filename='돋보기.png') }}" alt="검색 아이콘">
@@ -61,31 +64,27 @@
             <table id="customer-table">
                 <thead>
                     <tr>
-                        <th>상담일자 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
-                        <th>행사일자 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
-                        <th>고객명</th>
-                        <th>행사종류 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
-                        <th>세부종류</th>
-                        <th>전화번호</th>
-                        <th>상담중/상담완료 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th>상담일 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th>구분 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th>행사날짜 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th>시간</th>
+                        <th>예약자</th>
+                        <th>연락처</th>
+                        <th>계약중/계약완료 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th>문자발송 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for customer in customers %}
                     <tr data-href="{{ url_for('detail', index=loop.index0) }}">
-                        <td>{{ customer['상담일자'] }}</td>
-                        <td>{{ customer['행사일자'] }}</td>
-                        <td>{{ customer['고객명'] }}</td>
-                        <td>{{ customer['행사종류'] }}</td>
-                        <td>{{ customer['세부종류'] }}</td>
-                        <td>{{ customer['전화번호'] }}</td>
-                        <td>{{ customer['상담중/상담완료'] }}</td>
-                        <td>
-                            <form action="{{ url_for('delete_customer', index=loop.index0) }}" method="POST" onsubmit="return confirm('정말로 삭제하시겠습니까?');">
-                                <button type="submit" class="delete-btn">삭제</button>
-                            </form>
-                        </td>
+                        <td>{{ customer['상담일'] }}</td>
+                        <td>{{ customer['구분'] }}</td>
+                        <td>{{ customer['행사날짜'] }}</td>
+                        <td>{{ customer['시간'] }}</td>
+                        <td>{{ customer['예약자'] }}</td>
+                        <td>{{ customer['연락처'] }}</td>
+                        <td>{{ customer['계약중/계약완료'] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

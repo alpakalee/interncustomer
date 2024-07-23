@@ -112,11 +112,6 @@ th {
     margin-left: 5px;
 }
 
-.delete {
-    color: red;
-    cursor: pointer;
-}
-
 .add-customer {
     display: block;
     width: 95%;

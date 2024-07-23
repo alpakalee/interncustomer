@@ -13,23 +13,9 @@
         </div>
         <table>
             <tr>
-                <th>상담일자</th>
-                <td><textarea id="상담일자" name="상담일자" rows="1" style="width:95%;">{{ customer['상담일자'] }}</textarea></td>
+                <th>상담일</th>
+                <td><textarea id="상담일" name="상담일" rows="1" style="width:95%;">{{ customer['상담일'] }}</textarea></td>
             </tr>
-            <tr>
-                <th>행사일자</th>
-                <td><textarea id="행사일자" name="행사일자" rows="1" style="width:95%;">{{ customer['행사일자'] }}</textarea></td>
-            </tr>
-            <tr>
-                <th>고객명</th>
-                <td>
-                    <div class="flex-container">
-                        <textarea id="고객명" name="고객명" rows="1" style="width:80%;">{{ customer['고객명'] }}</textarea>
-                        <pre>  </pre>
-                        <button type="button" class="btn small-btn" onclick="openResponseForm({{ index }})">응답폼</button><pre> </pre>
-                    </div>
-                </td>
-            </tr>                           
             <tr>
                 <th>행사종류</th>
                 <td>
@@ -42,16 +28,42 @@
                 </td>
             </tr>
             <tr>
-                <th>세부종류</th>
-                <td><textarea id="세부종류" name="세부종류" rows="1" style="width:95%;">{{ customer['세부종류'] }}</textarea></td>
+                <th>구분</th>
+                <td><textarea id="구분" name="구분" rows="1" style="width:95%;">{{ customer['구분'] }}</textarea></td>
             </tr>
             <tr>
-                <th>전화번호</th>
-                <td><textarea id="전화번호" name="전화번호" rows="1" style="width:95%;">{{ customer['전화번호'] }}</textarea></td>
+                <th>행사날짜</th>
+                <td><textarea id="행사날짜" name="행사날짜" rows="1" style="width:95%;">{{ customer['행사날짜'] }}</textarea></td>
             </tr>
             <tr>
-                <th>상담중/상담완료</th>
-                <td class="left-align">{{ customer['상담중/상담완료'] }}</td>
+                <th>예상인원</th>
+                <td><textarea id="예상인원" name="예상인원" rows="1" style="width:95%;">{{ customer['예상인원'] }}</textarea></td>
+            </tr>
+            <tr>
+                <th>시간</th>
+                <td><textarea id="시간" name="시간" rows="1" style="width:95%;">{{ customer['시간'] }}</textarea></td>
+            </tr>
+            <tr>
+                <th>예약자</th>
+                <td>
+                    <div class="flex-container">
+                        <textarea id="예약자" name="예약자" rows="1" style="width:80%;">{{ customer['예약자'] }}</textarea>
+                        <pre>  </pre>
+                        <button type="button" class="btn small-btn" onclick="openResponseForm({{ index }})">응답폼</button><pre> </pre>
+                    </div>
+                </td>
+            </tr>                           
+            <tr>
+                <th>연락처</th>
+                <td><textarea id="연락처" name="연락처" rows="1" style="width:95%;">{{ customer['연락처'] }}</textarea></td>
+            </tr>
+            <tr>
+                <th>계약중/계약완료</th>
+                <td class="left-align">{{ customer['계약중/계약완료'] }}</td>
+            </tr>
+            <tr>
+                <th>문자발송</th>
+                <td><textarea id="문자발송" name="문자발송" rows="1" style="width:95%;">{{ customer['문자발송'] }}</textarea></td>
             </tr>
             <tr>
                 <th>상담내용</th>
@@ -61,11 +73,11 @@
             </tr>
         </table>
         <div class="button-container">
-            <form action="{{ url_for('update_status', index=index, status='상담중') }}" method="POST" style="flex: 1; margin-right: 10px;" class="status-form" onsubmit="return updateStatus(event, '상담중')">
-                <button type="submit" class="btn_detail">상담중으로 저장하기</button>
+            <form action="{{ url_for('update_status', index=index, status='계약중') }}" method="POST" style="flex: 1; margin-right: 10px;" class="status-form" onsubmit="return updateStatus(event, '계약중')">
+                <button type="submit" class="btn_detail">계약중으로 저장하기</button>
             </form>
-            <form action="{{ url_for('update_status', index=index, status='상담완료') }}" method="POST" style="flex: 1; margin-left: 10px;" class="status-form" onsubmit="return updateStatus(event, '상담완료')">
-                <button type="submit" class="btn_detail">상담완료로 저장하기</button>
+            <form action="{{ url_for('update_status', index=index, status='계약완료') }}" method="POST" style="flex: 1; margin-left: 10px;" class="status-form" onsubmit="return updateStatus(event, '계약완료')">
+                <button type="submit" class="btn_detail">계약완료로 저장하기</button>
             </form>
         </div>
         <div class="button-container">
@@ -76,23 +88,29 @@
         function updateStatus(event, status) {
         event.preventDefault();
         const form = event.target.closest('form');
-        const 상담일자 = document.getElementById('상담일자').value;
-        const 행사일자 = document.getElementById('행사일자').value;
-        const 고객명 = document.getElementById('고객명').value;
+        const 상담일 = document.getElementById('상담일').value;
         const 행사종류 = document.getElementById('행사종류').value;
-        const 세부종류 = document.getElementById('세부종류').value;
-        const 전화번호 = document.getElementById('전화번호').value;
+        const 구분 = document.getElementById('구분').value;
+        const 행사날짜 = document.getElementById('행사날짜').value;
+        const 예상인원 = document.getElementById('예상인원').value;
+        const 시간 = document.getElementById('시간').value;
+        const 예약자 = document.getElementById('예약자').value;
+        const 연락처 = document.getElementById('연락처').value;
+        const 문자발송 = document.getElementById('문자발송').value;
         const 상담내용 = document.getElementById('상담내용').value;
         
         const formData = new FormData(form);
-        formData.append('상담일자', 상담일자);
-        formData.append('행사일자', 행사일자);
-        formData.append('고객명', 고객명);
+        formData.append('상담일', 상담일);
         formData.append('행사종류', 행사종류);
-        formData.append('세부종류', 세부종류);
-        formData.append('전화번호', 전화번호);
+        formData.append('구분', 구분);
+        formData.append('행사날짜', 행사날짜);
+        formData.append('예상인원', 예상인원);
+        formData.append('시간', 시간);
+        formData.append('예약자', 예약자);
+        formData.append('연락처', 연락처);
+        formData.append('계약중/계약완료', status);
+        formData.append('문자발송', 문자발송);
         formData.append('상담내용', 상담내용);
-        formData.append('상담중/상담완료', status);
 
         fetch(form.action, {
             method: form.method,
@@ -100,7 +118,6 @@
         }).then(response => {
             if (response.ok) {
                 window.location.reload();
-                alert('상태 변경'); // Refresh the current window
             } else {
                 alert('상태 변경 실패');
             }
