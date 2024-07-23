@@ -108,23 +108,16 @@ def count_new_reservations(sheet_url):
 # 비동기적으로 예약 수를 가져오는 API
 @app.route('/api/reservations', methods=['GET'])
 def get_reservations():
-    # count_1_1 = count_new_reservations(spreadsheet_url1)
-    # count_2_2 = count_new_reservations(spreadsheet_url2)
-    # count_3_3 = count_new_reservations(spreadsheet_url3)
-    # count_4_4 = count_new_reservations(spreadsheet_url4)
-    # return jsonify({
-    #     'count_1': count_1_1,
-    #     'count_2': count_2_2,
-    #     'count_3': count_3_3,
-    #     'count_4': count_4_4
-    # })
+    count_1_1 = count_new_reservations(spreadsheet_url1)
+    count_2_2 = count_new_reservations(spreadsheet_url2)
+    count_3_3 = count_new_reservations(spreadsheet_url3)
+    count_4_4 = count_new_reservations(spreadsheet_url4)
     return jsonify({
-        'count_1': 1,
-        'count_2': 2,
-        'count_3': 3,
-        'count_4': 4
+        'count_1': count_1_1,
+        'count_2': count_2_2,
+        'count_3': count_3_3,
+        'count_4': count_4_4
     })
-
 @app.route('/')
 def index():
     customers = load_customers_from_excel(excel_file)
