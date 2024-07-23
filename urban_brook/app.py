@@ -7,7 +7,7 @@ from datetime import datetime
 
 # 구글 시트 인증정보 설정
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("C:/digital-yeti-429601-v5-01c3837c2955.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("digital-yeti-429601-v5-01c3837c2955.json", scope)
 gc = gspread.authorize(creds)
 
 # 플라스크 실행
@@ -62,7 +62,6 @@ def find_customer_data(sheet_data, customer_name, event_type):
     search_column = '예약자 성함'
     if event_type == "비즈니스":
         search_column = '예약자(담당자) 성함'
-
     for row in sheet_data:
         if row.get(search_column) == customer_name:
             return row
@@ -96,14 +95,12 @@ def count_new_reservations(sheet_url):
                 continue
             date_only_str = date_str.split()[0] + " " + date_str.split()[1] + " " + date_str.split()[2]
             date_obj = datetime.strptime(date_only_str, '%Y. %m. %d').date()
-
             date_diff = abs((today - date_obj).days)
-
             # 날짜 비교
             if date_diff <= 1:
                 count += 1
         except ValueError as ve:
-            print(f"유효하지 않은 날짜 형식: {date_str}, 오류: {ve}")
+            pass
     return count
 
 # 비동기적으로 예약 수를 가져오는 API
@@ -131,13 +128,10 @@ def index():
     customers = load_customers_from_excel(excel_file)
     return render_template('index.html', customers=customers)
 
-#수정
 @app.route('/detail/<int:index>', methods=['GET', 'POST'])
 def detail(index):
     if request.method == 'POST':
         customer = get_customer_from_excel(excel_file, index)
-        # customer['상담내용'] = request.form['상담내용']
-        # customer['상담중/상담완료'] = request.form['상담중/상담완료']
         save_customer_to_excel(excel_file, index, customer)
         return redirect(url_for('detail', index=index))
     customer = get_customer_from_excel(excel_file, index)
