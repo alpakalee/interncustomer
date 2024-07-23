@@ -8,8 +8,8 @@
     <script src="{{ url_for('static', filename='sort.js') }}" defer></script>
     <script src="{{ url_for('static', filename='search.js') }}" defer></script>
     <script src="{{ url_for('static', filename='detail.js') }}" defer></script>
+    <!-- 날짜, 구글 시트 새로운 예약 로딩 -->
     <script>
-        // 날짜, 구글 시트 새로운 예약 로딩
         async function fetchReservations() {
             document.getElementById("loading-text").style.display = "block";
             document.getElementById("reservation-content").style.display = "none";
@@ -70,9 +70,8 @@
                         <th>시간</th>
                         <th>예약자</th>
                         <th>연락처</th>
-                        <th>계약중/계약완료 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th>계약상태 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
                         <th>문자발송 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -85,6 +84,7 @@
                         <td>{{ customer['예약자'] }}</td>
                         <td>{{ customer['연락처'] }}</td>
                         <td>{{ customer['계약중/계약완료'] }}</td>
+                        <td>{{ customer['문자발송'] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

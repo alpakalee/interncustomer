@@ -1,3 +1,4 @@
+/* 글로벌 */
 body {
     font-family: 'Noto Sans KR', sans-serif;
     background-color: #d6c0a8;
@@ -9,12 +10,11 @@ body {
     height: 100vh;
     overflow: hidden; /* Prevents scrolling of the entire body */
 }
-
+/* 컨테이너 */
 .container {
     background-color: #fff;
     width: 85vw; /* Adjusted width to fit within the viewport */
     max-width: 1200px; /* Maximum width */
-    /*height: 90vh; *//* Adjusted height to fit within the viewport */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -43,6 +43,7 @@ body {
     height: 90vh; /* 화면 높이에 맞추기 위해 전체 높이를 설정 */
 }
 
+/* 테이블 row */
 tr {
     cursor: pointer;
 }
@@ -50,13 +51,7 @@ tr {
 tr:hover {
     background-color: #f1e9d8;
 }
-
-h1 {
-    font-size: 24px;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
+/* index.html 검색창 */
 .search-bar {
     display: flex;
     align-items: center;
@@ -64,7 +59,7 @@ h1 {
 }
 
 .search-bar input {
-    width: calc(100% - 40px);
+    width: 300px;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -77,6 +72,7 @@ h1 {
     height: 24px;
 }
 
+/* 테이블 */
 .table-container {
     flex: 1;
     overflow-y: auto;
@@ -90,11 +86,10 @@ table {
 
 th, td {
     padding: 10px;
-    text-align: left;
+    /* text-align: left; */
     border-bottom: 1px solid #ccc;
     text-align: center; /* 수평 중앙 정렬 */
     height: 100%; /* 부모 요소 높이에 맞추기 */
-    resize: none; /* 필요에 따라 조정 */
 }
 
 th {
@@ -112,6 +107,7 @@ th {
     margin-left: 5px;
 }
 
+/* index.html 고객추가 */
 .add-customer {
     display: block;
     width: 95%;
@@ -123,18 +119,6 @@ th {
     border-radius: 5px;
     position: sticky;
     bottom: 0;
-}
-
-.btn {
-    display: block;
-    width: 15%;
-    text-align: center;
-    padding: 10px;
-    background-color: #000;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: 10px;
 }
 
 .button-container {
@@ -157,6 +141,7 @@ textarea {
     resize: none;
 }
 
+/* 예약자+ 응답폼버튼 */
 .flex-container {
     display: flex;
     align-items: center;
@@ -164,6 +149,7 @@ textarea {
     padding-left: 1ch;
 }
 
+/* 응답폼 버튼 */
 .flex-container .small-btn {
     width: 40%;
     padding: 5px 10px;
@@ -178,21 +164,22 @@ textarea {
     text-decoration: none;
     border-radius: 5px;
     text-align: center;
-
-
 }
 
+/* add_customer.html 버튼 */
 .btn {
-    display: inline-block;
-    padding: 10px 20px;
+    display: block;
+    width: 15%;
+    text-align: center;
+    padding: 10px;
     background-color: #000;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
-    text-align: center;
     margin-top: 10px;
 }
 
+/* 나머지 버튼 */
 .btn_detail {
     display: inline-block;
     padding: 10px 20px;
@@ -204,20 +191,13 @@ textarea {
     margin-top: 10px;
 }
 
+/* detail.html 계약상태 좌측정렬 */
 .left-align {
     text-align: left;
-    padding-left: 3ch;
+    padding-left: 2ch;
 }
 
-.right-aligned {
-    justify-content: flex-end; /* 버튼을 오른쪽으로 정렬 */
-}
-
-
-.right-aligned {
-    margin-left: auto; /* 버튼을 오른쪽으로 밀어붙임 */
-}
-
+/* type선택창 css */
 .event-type-select {
     width: 98%;
     padding-top: 10px; /* 위쪽 간격 */
@@ -228,14 +208,7 @@ textarea {
     box-sizing: border-box; /* 패딩이 width에 포함되도록 설정 */
 }
 
-.main-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 1200px;
-}
-
+/* index.html 사이드바 */
 .sidebar {
     width: 300px;
     background-color: #fff;
@@ -255,6 +228,7 @@ textarea {
     margin: 5px 0;
 }
 
+/* index.html 새로고침 */
 .refresh-button {
     display: block;
     width: 100%;
@@ -266,8 +240,4 @@ textarea {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-.highlight {
-    color: red;
-    font-weight: bold;
 }

@@ -6,8 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
 
     document.querySelectorAll('th').forEach((th, index) => {
-        // 고객명 (2)과 전화번호 (4)는 정렬에서 제외
-        if (![2, 4].includes(index)) {
+        if (![3, 4, 5].includes(index)) {
             th.addEventListener('click', function() {
                 const table = th.closest('table');
                 const sortIcon = th.querySelector('.sort-icon');

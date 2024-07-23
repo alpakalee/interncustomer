@@ -57,13 +57,6 @@ def save_customer_to_excel(file_path, index, customer):
         df.at[index, key] = customer[key]
     df.to_excel(file_path, index=False)
 
-# 구글 시트에서 데이터 가져오기
-def get_google_sheet_data(spreadsheet_url, worksheet_name):
-    doc = gc.open_by_url(spreadsheet_url)
-    worksheet = doc.worksheet(worksheet_name)
-    data = worksheet.get_all_records()
-    return data
-
 # 고객명, 행사종류로 고객 데이터 찾기
 def find_customer_data(sheet_data, customer_name, event_type):
     search_column = '예약자 성함'
@@ -75,30 +68,20 @@ def find_customer_data(sheet_data, customer_name, event_type):
             return row
     return None
 
-# 행사종류에 따른 구글 시트 링크
-def get_sheet_details_by_event_type(event_type):
+# 행사종류에 따른 구글 시트 데이터
+def get_sheet_data_by_event_type(event_type):
     if event_type == "돌/가족행사":
-        return {
-            "spreadsheet_url": spreadsheet_url1,
-            "worksheet_name": "설문지 응답 시트1"
-        }
+        spreadsheet_url = spreadsheet_url1
     elif event_type == "웨딩":
-        return {
-            "spreadsheet_url": spreadsheet_url2,
-            "worksheet_name": "설문지 응답 시트1"
-        }
+        spreadsheet_url = spreadsheet_url2
     elif event_type == "비즈니스":
-        return {
-            "spreadsheet_url": spreadsheet_url3,
-            "worksheet_name": "설문지 응답 시트1"
-        }
+        spreadsheet_url = spreadsheet_url3
     elif event_type == "기타":
-        return {
-            "spreadsheet_url": spreadsheet_url4,
-            "worksheet_name": "설문지 응답 시트1"
-        }
-    else:
-        return None
+        spreadsheet_url = spreadsheet_url4
+    doc = gc.open_by_url(spreadsheet_url)
+    worksheet = doc.worksheet("설문지 응답 시트1")
+    data = worksheet.get_all_records()
+    return data
 
 # 새 예약 수 계산
 def count_new_reservations(sheet_url):
@@ -206,12 +189,7 @@ def response_form(index):
     customer = get_customer_from_excel(excel_file, index)
     event_type = customer['행사종류']
     customer_name = customer['예약자']
-    sheet_details = get_sheet_details_by_event_type(event_type)
-    #수정 worksheet name 없애기
-    sheet_data = get_google_sheet_data(sheet_details['spreadsheet_url'], sheet_details['worksheet_name'])
-    print(sheet_data)
-    print(customer_name)
-    print(event_type)
+    sheet_data = get_sheet_data_by_event_type(event_type)
     customer_data = find_customer_data(sheet_data, customer_name, event_type)
     if not customer_data:
         return f"{event_type}의 구글 시트에서 예약자 명을 찾지 못했습니다.\n다시 한 번 확인해주세요."
