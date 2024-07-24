@@ -15,11 +15,7 @@ app = Flask(__name__)
 
 # 초기 고객 데이터
 initial_data = [
-<<<<<<< HEAD
     {'상담일': '7/13', '행사종류': '웨딩', '구분': '결혼식', '행사날짜': '7/20', '예상인원': '10명','시간': '점심', '예약자': '○○○',  '연락처': '010-1111-1111', '계약미완료/계약완료': '계약완료', '문자발송': 'o', '상담내용': '~~~'}
-=======
-    {'상담일': '7/13', '행사종류': '웨딩', '구분': '결혼식', '행사날짜': '7/20', '예상인원': '10명', '예약자': '○○○',  '연락처': '010-1111-1111', '계약중/계약완료': '계약완료', '문자발송': 'o', '상담내용': '~~~'}
->>>>>>> 31aa8f284e689c6b5d15f596eaaf7aca01994cdf
 ]
 
 spreadsheet_url1= "https://docs.google.com/spreadsheets/d/1rSQ9kiJ59S6aYP-oXaFDVTe2cSlt48Xr8FgKz-gZIM4/edit?gid=1361594786#gid=1361594786"
@@ -151,11 +147,7 @@ def create_customer():
         '시간': request.form['시간'],
         '예약자': request.form['예약자'],
         '연락처': request.form['연락처'],
-<<<<<<< HEAD
         '계약미완료/계약완료': request.form['계약미완료/계약완료'],
-=======
-        '계약중/계약완료': request.form['계약중/계약완료'],
->>>>>>> 31aa8f284e689c6b5d15f596eaaf7aca01994cdf
         '문자발송': request.form['문자발송'],
         '상담내용': request.form['상담내용']
     }
@@ -175,11 +167,7 @@ def update_status(index, status):
     customer['시간'] = request.form['시간']
     customer['예약자'] = request.form['예약자']
     customer['연락처'] = request.form['연락처']
-<<<<<<< HEAD
     customer['계약미완료/계약완료'] = status
-=======
-    customer['계약중/계약완료'] = status
->>>>>>> 31aa8f284e689c6b5d15f596eaaf7aca01994cdf
     customer['문자발송'] = request.form['문자발송']
     customer['상담내용'] = request.form['상담내용']
     save_customer_to_excel(excel_file, index, customer)
