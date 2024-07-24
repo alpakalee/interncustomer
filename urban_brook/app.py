@@ -4,6 +4,9 @@ import os
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
+import webbrowser
+import threading
+import time
 
 # 구글 시트 인증정보 설정
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -12,6 +15,10 @@ gc = gspread.authorize(creds)
 
 # 플라스크 실행
 app = Flask(__name__)
+
+def open_browser():
+    time.sleep(1)  # 웹 서버가 시작될 때까지 잠시 기다립니다.
+    webbrowser.open_new("http://127.0.0.1:5000/")
 
 # 초기 고객 데이터
 initial_data = [
@@ -183,4 +190,5 @@ def show_response_form():
     return render_template('response_form.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    threading.Thread(target=open_browser).start()
+    app.run()
