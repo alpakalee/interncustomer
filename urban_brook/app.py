@@ -15,9 +15,10 @@ app = Flask(__name__)
 
 # 초기 고객 데이터
 initial_data = [
-    {'상담일': '7/13', '행사종류': '웨딩', '구분': '결혼식', '행사날짜': '7/20', '예상인원': '10명','시간': '점심', '예약자': '○○○',  '연락처': '010-1111-1111', '계약미완료/계약완료': '계약완료', '문자발송': 'o', '상담내용': '~~~'}
+    {'상담일': '새로생성됨', '행사종류': '새로생성됨', '구분': '새로생성됨', '행사날짜': '새로생성됨', '예상인원': '새로생성됨','시간': '새로생성됨', '예약자': '새로생성됨',  '연락처': '엑셀파일을 열어 변경하세요', '계약미완료/계약완료': '새로생성됨', '문자발송': '새로생성됨', '상담내용': '새로생성됨'}
 ]
 
+#돌/가족잔치, 웨딩, 비즈니스, 기타 순
 spreadsheet_url1= "https://docs.google.com/spreadsheets/d/1rSQ9kiJ59S6aYP-oXaFDVTe2cSlt48Xr8FgKz-gZIM4/edit?gid=1361594786#gid=1361594786"
 spreadsheet_url2= "https://docs.google.com/spreadsheets/d/1OtWfY2pDtMweXd74ttAleVNloei8cyM99uGSmZISn1A/edit?gid=1258371576#gid=1258371576"
 spreadsheet_url3= "https://docs.google.com/spreadsheets/d/1Ogb4zN56bskVjSdp7jk6tNVntbec2GS1DDBunQfVi2U/edit?gid=1609720562#gid=1609720562"
@@ -56,17 +57,6 @@ def save_customer_to_excel(file_path, index, customer):
     for key in customer:
         df.at[index, key] = customer[key]
     df.to_excel(file_path, index=False)
-
-# 고객명, 행사종류로 고객 데이터 찾기
-def find_customer_data(sheet_data, customer_name, event_type):
-    search_column = '예약자 성함'
-    if event_type == "비즈니스":
-        search_column = '예약자(담당자) 성함'
-
-    for row in sheet_data:
-        if row.get(search_column) == customer_name:
-            return row
-    return None
 
 # 행사종류에 따른 구글 시트 데이터
 def get_sheet_data_by_event_type(event_type):
@@ -118,6 +108,7 @@ def get_reservations():
         'count_3': count_3_3,
         'count_4': count_4_4
     })
+
 @app.route('/')
 def index():
     customers = load_customers_from_excel(excel_file)

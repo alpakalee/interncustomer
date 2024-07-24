@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     document.querySelectorAll('th').forEach((th, index) => {
-        if (![3, 4, 5].includes(index)) {
+        if (![3, 4, 5].includes(index)) { // 3(시간), 4(예약자), 5(연락처) 에 대한 정렬 제외
             th.addEventListener('click', function() {
                 const table = th.closest('table');
                 const sortIcon = th.querySelector('.sort-icon');
