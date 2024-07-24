@@ -7,7 +7,7 @@ from datetime import datetime
 
 # 구글 시트 인증정보 설정
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("C:/digital-yeti-429601-v5-01c3837c2955.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("digital-yeti-429601-v5-01c3837c2955.json", scope)
 gc = gspread.authorize(creds)
 
 # 플라스크 실행
@@ -24,7 +24,7 @@ spreadsheet_url3= "https://docs.google.com/spreadsheets/d/1Ogb4zN56bskVjSdp7jk6t
 spreadsheet_url4= "https://docs.google.com/spreadsheets/d/1b-5orqX9nHSNMkmbW8qgHO4QK3fcdFHi8ieSojJX0jQ/edit?gid=926356915#gid=926356915"
 
 # 엑셀 파일 경로(고객관리 저장)
-excel_file = 'customers.xlsx'
+excel_file = 'urban_brook_CRM.xlsx'
 
 # 엑셀이 없으면 생성
 def create_initial_excel(file_path, data):

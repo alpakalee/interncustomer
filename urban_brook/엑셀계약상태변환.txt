@@ -1,0 +1,12 @@
+Sub UpdateContractStatus()
+    Dim cell As Range
+
+    ' 사용자가 선택한 셀 범위
+    For Each cell In Selection
+        If cell.Value = "ㅇ" Then
+            cell.Value = "계약완료"
+        ElseIf cell.Value = "x" Or cell.Value = "" Then
+            cell.Value = "계약미완료"
+        End If
+    Next cell
+End Sub
