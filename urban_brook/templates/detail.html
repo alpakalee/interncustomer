@@ -58,8 +58,13 @@
                 <td><textarea id="연락처" name="연락처" rows="1" style="width:95%;">{{ customer['연락처'] }}</textarea></td>
             </tr>
             <tr>
+<<<<<<< HEAD
                 <th>계약상태</th>
                 <td class="left-align">{{ customer['계약미완료/계약완료'] }}</td>
+=======
+                <th>계약중/계약완료</th>
+                <td class="left-align">{{ customer['계약중/계약완료'] }}</td>
+>>>>>>> 31aa8f284e689c6b5d15f596eaaf7aca01994cdf
             </tr>
             <tr>
                 <th>문자발송</th>
@@ -73,11 +78,19 @@
             </tr>
         </table>
         <div class="button-container">
+<<<<<<< HEAD
             <form action="{{ url_for('update_status', index=index, status='계약미완료') }}" method="POST" style="flex: 1; margin-right: 10px;" class="status-form" onsubmit="return updateStatus(event, '계약미완료')">
                 <button type="submit" class="btn_detail">계약미완료로 저장</button>
             </form>
             <form action="{{ url_for('update_status', index=index, status='계약완료') }}" method="POST" style="flex: 1; margin-left: 10px;" class="status-form" onsubmit="return updateStatus(event, '계약완료')">
                 <button type="submit" class="btn_detail">계약완료로 저장</button>
+=======
+            <form action="{{ url_for('update_status', index=index, status='계약중') }}" method="POST" style="flex: 1; margin-right: 10px;" class="status-form" onsubmit="return updateStatus(event, '계약중')">
+                <button type="submit" class="btn_detail">계약중으로 저장하기</button>
+            </form>
+            <form action="{{ url_for('update_status', index=index, status='계약완료') }}" method="POST" style="flex: 1; margin-left: 10px;" class="status-form" onsubmit="return updateStatus(event, '계약완료')">
+                <button type="submit" class="btn_detail">계약완료로 저장하기</button>
+>>>>>>> 31aa8f284e689c6b5d15f596eaaf7aca01994cdf
             </form>
         </div>
         <div class="button-container">
@@ -108,7 +121,11 @@
         formData.append('시간', 시간);
         formData.append('예약자', 예약자);
         formData.append('연락처', 연락처);
+<<<<<<< HEAD
         formData.append('계약미완료/계약완료', status);
+=======
+        formData.append('계약중/계약완료', status);
+>>>>>>> 31aa8f284e689c6b5d15f596eaaf7aca01994cdf
         formData.append('문자발송', 문자발송);
         formData.append('상담내용', 상담내용);
 
