@@ -1,0 +1,20 @@
+Sub ConvertSelectedDateFormat()
+    Dim cell As Range
+    Dim originalDate As String
+    Dim dayPart As String
+    Dim monthPart As String
+    Dim newDate As String
+
+    ' 사용자가 선택한 셀 범위
+    For Each cell In Selection
+        If cell.Value <> "" Then
+            originalDate = cell.Value
+            ' "6월1일" 형식을 분리
+            monthPart = Format(Left(originalDate, InStr(originalDate, "월") - 1), "00")
+            dayPart = Format(Mid(originalDate, InStr(originalDate, "월") + 1, InStr(originalDate, "일") - InStr(originalDate, "월") - 1), "00")
+            ' 새로운 형식으로 결합
+            newDate = "24년" & monthPart & "월" & dayPart & "일"
+            cell.Value = newDate
+        End If
+    Next cell
+End Sub

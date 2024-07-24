@@ -1,0 +1,12 @@
+Sub UnmergeAndFill()
+    Dim cell As Range
+    Dim mergedCells As Range
+    
+    For Each cell In Selection
+        If cell.MergeCells Then
+            Set mergedCells = cell.MergeArea
+            cell.MergeCells = False
+            mergedCells.Value = cell.Value
+        End If
+    Next cell
+End Sub

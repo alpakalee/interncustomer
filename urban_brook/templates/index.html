@@ -8,12 +8,54 @@
     <script src="{{ url_for('static', filename='sort.js') }}" defer></script>
     <script src="{{ url_for('static', filename='search.js') }}" defer></script>
     <script src="{{ url_for('static', filename='detail.js') }}" defer></script>
+    <!-- 날짜, 구글 시트 새로운 예약 로딩 -->
+    <script>
+        async function fetchReservations() {
+            document.getElementById("loading-text").style.display = "block";
+            document.getElementById("reservation-content").style.display = "none";
+
+            const response = await fetch("{{ url_for('get_reservations') }}");
+            const data = await response.json();
+
+            document.getElementById("count_1_1").innerText = data.count_1;
+            document.getElementById("count_2_2").innerText = data.count_2;
+            document.getElementById("count_3_3").innerText = data.count_3;
+            document.getElementById("count_4_4").innerText = data.count_4;
+            if (data.count_1 > 0) {
+                document.getElementById("count_1").style.color = "red";
+            }
+            if (data.count_2 > 0) {
+                document.getElementById("count_2").style.color = "red";
+            }
+            if (data.count_3 > 0) {
+                document.getElementById("count_3").style.color = "red";
+            }
+            if (data.count_4 > 0) {
+                document.getElementById("count_4").style.color = "red";
+            }
+            document.getElementById("loading-text").style.display = "none";
+            document.getElementById("reservation-content").style.display = "block";
+
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const todayStr = today.toLocaleDateString('ko-KR', options);
+            const yesterdayStr = yesterday.toLocaleDateString('ko-KR', options);
+            document.getElementById("date-info").innerText = `${yesterdayStr} ~ ${todayStr}`;
+        }
+        
+        window.onload = fetchReservations;
+    </script>
 </head>
 <body>
     <div class="container">
+        <!-- 로고 -->
         <div class="logo-container">
             <img src="{{ url_for('static', filename='로고제목.png') }}" alt="어반브룩 아이콘" class="logo" style="width:100%; height:auto;">
         </div>
+        <!-- 검색창 -->
         <div class="search-bar">
             <input type="text" id="search-input" placeholder="검색">
             <img src="{{ url_for('static', filename='돋보기.png') }}" alt="검색 아이콘">
@@ -22,29 +64,27 @@
             <table id="customer-table">
                 <thead>
                     <tr>
-                        <th>상담일자 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
-                        <th>행사일자 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
-                        <th>고객명</th>
-                        <th>행사 종류 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
-                        <th>전화번호</th>
-                        <th>상담중/상담완료 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
-                        <th></th>
+                        <th>상담일 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th>구분 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th>행사날짜 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th>시간</th>
+                        <th>예약자</th>
+                        <th>연락처</th>
+                        <th>계약상태 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
+                        <th>문자발송 <img src="{{ url_for('static', filename='down.png') }}" class="sort-icon" data-sort="asc"></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for customer in customers %}
                     <tr data-href="{{ url_for('detail', index=loop.index0) }}">
-                        <td>{{ customer['상담일자'] }}</td>
-                        <td>{{ customer['행사일자'] }}</td>
-                        <td>{{ customer['고객명'] }}</td>
-                        <td>{{ customer['행사 종류'] }}</td>
-                        <td>{{ customer['전화번호'] }}</td>
-                        <td>{{ customer['상담중/상담완료'] }}</td>
-                        <td>
-                            <form action="{{ url_for('delete_customer', index=loop.index0) }}" method="POST" onsubmit="return confirm('정말로 삭제하시겠습니까?');">
-                                <button type="submit" class="delete-btn">삭제</button>
-                            </form>
-                        </td>
+                        <td>{{ customer['상담일'] }}</td>
+                        <td>{{ customer['구분'] }}</td>
+                        <td>{{ customer['행사날짜'] }}</td>
+                        <td>{{ customer['시간'] }}</td>
+                        <td>{{ customer['예약자'] }}</td>
+                        <td>{{ customer['연락처'] }}</td>
+                        <td>{{ customer['계약미완료/계약완료'] }}</td>
+                        <td>{{ customer['문자발송'] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -54,11 +94,16 @@
         <a href="{{ url_for('add_customer') }}" class="add-customer">고객 추가</a>
     </div>
     <div class="sidebar">
-        <h2>새로운 예약</h2>
-        <p class="{% if count_1 != 0 %}highlight{% endif %}">돌 가족행사 새로운 예약 수: {{ count_1 }} 건</p>
-        <p class="{% if count_2 != 0 %}highlight{% endif %}">웨딩 새로운 예약 수: {{ count_2 }} 건</p>
-        <p class="{% if count_3 != 0 %}highlight{% endif %}">비즈니스 새로운 예약 수: {{ count_3 }} 건</p>
-        <button class="refresh-button" onclick="window.location.reload();">새로고침</button>
+        <h2 id="loading-text">어제의 예약을 로딩 중...</h2>
+        <div id="reservation-content" style="display: none;">
+            <h2>새로운 예약</h2>
+            <h4 id="date-info"></h4>
+            <p id="count_1">돌 가족행사 : <span id="count_1_1">0</span> 건</p>
+            <p id="count_2">웨딩 : <span id="count_2_2">0</span> 건</p>
+            <p id="count_3">비즈니스 : <span id="count_3_3">0</span> 건</p>
+            <p id="count_4">기타(소모임) : <span id="count_4_4">0</span> 건</p>
+            <button class="refresh-button" onclick="fetchReservations();">새로고침</button>
+        </div>
     </div>
 </body>
 </html>

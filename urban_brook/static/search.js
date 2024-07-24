@@ -6,10 +6,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const filter = searchInput.value.toLowerCase();
 
         tableRows.forEach(row => {
-            const customerName = row.children[2].innerText.toLowerCase();
-            const phoneNumber = row.children[4].innerText.toLowerCase();
+            const event_type = row.children[1].innerText.toLowerCase();
+            const customerName = row.children[4].innerText.toLowerCase();
+            const phoneNumber = row.children[5].innerText.toLowerCase();
 
-            if (customerName.includes(filter) || phoneNumber.includes(filter)) {
+            if (customerName.includes(filter) || phoneNumber.includes(filter) || event_type.includes(filter)) {
                 row.style.display = '';
             } else {
                 row.style.display = 'none';

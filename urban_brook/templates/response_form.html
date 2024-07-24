@@ -12,18 +12,58 @@
         <div class="logo-container">
             <img src="{{ url_for('static', filename='응답폼.png') }}" alt="어반브룩 아이콘" class="logo" style="width:100%; height:auto;">
         </div>
-        <table>
-            {% for key, value in customer_data.items() %}
-            <tr>
-                <th>{{ key }}</th>
-                <td>{{ value }}</td>
-            </tr>
-            {% endfor %}
+        <table id="response-table">
+            <!-- 데이터가 JavaScript에 의해 삽입됩니다. -->
         </table>
         <div class="button-container-response">
+            <button class="btn_detail" onclick="showNext()">다음으로</button>
             <button class="btn_detail" onclick="window.close()">닫기</button>
         </div>
     </div>
-    
+    <script>
+        let customerDataList = [];
+        let currentIndex = 0;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const data = Object.fromEntries(urlParams.entries());
+            fetch(`/response_form/${data.index}`)
+                .then(response => response.json())
+                .then(result => {
+                    if (result.error) {
+                        alert(result.error);
+                        window.close();
+                    } else {
+                        customerDataList = result.customer_data_list;
+                        displayData(0); // 첫 번째 데이터를 보여줌
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('데이터를 불러오는데 실패했습니다.');
+                });
+        });
+
+        function displayData(index) {
+            const table = document.getElementById('response-table');
+            table.innerHTML = '';
+            const customerData = customerDataList[index];
+            for (const [key, value] of Object.entries(customerData)) {
+                const row = document.createElement('tr');
+                const cellKey = document.createElement('th');
+                cellKey.textContent = key;
+                const cellValue = document.createElement('td');
+                cellValue.textContent = value;
+                row.appendChild(cellKey);
+                row.appendChild(cellValue);
+                table.appendChild(row);
+            }
+        }
+
+        function showNext() {
+            currentIndex = (currentIndex + 1) % customerDataList.length;
+            displayData(currentIndex);
+        }
+    </script>
 </body>
 </html>

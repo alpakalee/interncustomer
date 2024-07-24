@@ -6,9 +6,3 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
-document.querySelectorAll('.delete-btn').forEach(button => {
-    button.addEventListener('click', function(event) {
-        event.stopPropagation();
-    });
-});
